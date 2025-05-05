@@ -16,7 +16,7 @@ public class AWSSecretsManagerClient {
 
     public void getSecret() {
 
-        System.out.println("SecretManager Execution Started .... ");
+        log.info("SecretManager Execution Started .... ");
 
         String secretName = "qa/databaseCredentials/MySql";
         Region region = Region.of("eu-west-1");
@@ -55,7 +55,7 @@ public class AWSSecretsManagerClient {
         }
 
         String secret = getSecretValueResponse.secretString();
-        System.out.println("Secret for " + secretName + " = "+secret);
+        log.info("Secret for " + secretName + " = "+secret);
     }
 
 
