@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.4.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	
+	<groupId>com.wm</groupId>
+	<artifactId>autospec-service</artifactId>
+	<version>1.0.0</version>
+	<name>autospec-service</name>
+	<description>AutoSpec service for product attribute extraction</description>
+	<packaging>pom</packaging>
+
+
+	<!-- Java Version -->
+	<properties>
+		<java.version>17</java.version>
+	</properties>
+
+	<modules>
+		<module>autospec-app</module>
+	    <module>autospec-common</module>
+	    <module>autospec-data-processing</module>
+	    <module>autospec-prompt-generation</module>
+  	</modules>
+
+	<dependencyManagement>
+	    <dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>3.4.5</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.28</version>
+				<optional>true</optional>
+			</dependency>
+	    </dependencies>
+  	</dependencyManagement>
+
+</project>
