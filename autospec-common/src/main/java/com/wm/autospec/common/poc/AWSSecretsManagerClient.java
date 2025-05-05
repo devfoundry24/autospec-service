@@ -51,6 +51,7 @@ public class AWSSecretsManagerClient {
         try {
             getSecretValueResponse = client.getSecretValue(getSecretValueRequest);
         } catch (Exception e) {
+            log.error("Error while fetching secret from AWS Secrets Manager", e);
             throw e;
         }
 
