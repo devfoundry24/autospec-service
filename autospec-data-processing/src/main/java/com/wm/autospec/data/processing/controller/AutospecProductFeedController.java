@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/autospec")
+@RequestMapping("/autospec/api/v1")
 @Slf4j
 public class AutospecProductFeedController {
 
     @Autowired
     AutoSpecProductFeedService autoSpecProductFeedService;
 
-    @PostMapping("/api/v1/feeds/{feedId}")
+    @PostMapping("/feeds/{feedId}")
     public ResponseEntity<String> saveProductFeedItem(@RequestBody ProductFeedItem productFeedItem) {
 
         log.info("Controller Received ProductFeedItem: {}", productFeedItem);
@@ -32,7 +32,7 @@ public class AutospecProductFeedController {
         }
     }
 
-    @GetMapping("/api/v1/feeds/{feedId}")
+    @GetMapping("/feeds/{feedId}")
     public List<ProductFeedItem> getFeedItemDetailsForFeed(@PathVariable("feedId") String feedId) {
 
         log.info("Controller Received feedId: {}", feedId);

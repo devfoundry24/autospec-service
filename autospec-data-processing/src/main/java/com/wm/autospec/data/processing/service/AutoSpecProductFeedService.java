@@ -17,6 +17,18 @@ public class AutoSpecProductFeedService {
     @Autowired
     private ProductFeedItemRepository feedItemRepository;
 
+
+
+    public void saveProductFeedItem(ProductFeedItem productFeedItem) {
+        log.info("Saving product feed item with id: {}", productFeedItem.getId());
+        try {
+            feedItemRepository.save(productFeedItem);
+            log.info("Product feed item saved successfully with id: {}", productFeedItem.getId());
+        } catch (Exception e) {
+            log.error("Error saving product feed item: {}", e.getMessage(), e);
+        }
+    }
+
     public List<ProductFeedItem> getProductFeedDetails(String productFeedId) {
 
         log.info("Fetching product feed details for feedId: {}", productFeedId);
@@ -31,15 +43,5 @@ public class AutoSpecProductFeedService {
         log.info("Feed item found with size : {}", feedItems.size());
 
         return feedItems;
-    }
-
-    public void saveProductFeedItem(ProductFeedItem productFeedItem) {
-        log.info("Saving product feed item with id: {}", productFeedItem.getId());
-        try {
-            feedItemRepository.save(productFeedItem);
-            log.info("Product feed item saved successfully with id: {}", productFeedItem.getId());
-        } catch (Exception e) {
-            log.error("Error saving product feed item: {}", e.getMessage(), e);
-        }
     }
 }
