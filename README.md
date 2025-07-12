@@ -28,3 +28,26 @@ This project is an **Automated Specification Attribute Extraction system** built
 
 ## 📁 Project Structure
 
+**autospec-data-processing/**
+├── domain/                  ← Core business logic and model
+│   ├── model/
+│   │   └── ProductFeedItem.java
+│   ├── port/
+│   │   ├── in/              ← Use Cases (Input Port Interfaces)
+│   │   │   └── ProductFeedUseCase.java
+│   │   └── out/             ← External Interfaces (Output Ports)
+│   │       └── ProductFeedRepositoryPort.java
+│   └── service/
+│       └── ProductFeedService.java  ← Implements Use Case
+│
+├── adapter/
+│   ├── in/web/              ← Web Adapter (REST Controller)
+│   │   └── ProductFeedController.java
+│   └── out/persistence/     ← DB Adapter
+│       ├── ProductFeedItemMongoAdapter.java
+│       └── ProductFeedItemRepository.java
+│
+└── config/
+└── BeanConfig.java
+
+

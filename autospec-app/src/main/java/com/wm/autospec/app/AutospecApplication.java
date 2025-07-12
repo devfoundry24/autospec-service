@@ -22,11 +22,6 @@ public class AutospecApplication {
 		ApplicationContext context = SpringApplication.run(AutospecApplication.class, args);
 
 		log.info("Autospec Service started successfully.");
-
-		// Retrieve the AWSSecretsManagerClient bean and call the getSecret method
-		log.info("Calling Secrets Manager Client ...");
-		AWSSecretsManagerClient secretsManagerClient = context.getBean(AWSSecretsManagerClient.class);
-		secretsManagerClient.getSecret();
 	}
 
 }
