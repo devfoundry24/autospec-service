@@ -25,7 +25,7 @@ public class AWSSecretsManagerClient {
         SecretsManagerClient client = SecretsManagerClient.builder()
                 .region(region).
                 credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(
-                        "accessKey", "secretKey")))
+                        "AKIAXIR2MNB53EVEGA3Z", "HiZnP91FNhaSh9OIF5LIibotoDnFAryHeuAoLXYm")))
                 .build();
         /*
             TODO :

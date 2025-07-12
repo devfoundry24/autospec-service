@@ -1,4 +1,4 @@
-package com.wm.autospec.data.processing.model;
+package com.wm.domain.model;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +15,7 @@ public class ProductFeedItem {
     @Id
     private String id;
 
-    @Field("feed_id")
+    @Field("feedId")
     private String feedId;
 
     @Field("feed_item_status")
@@ -24,14 +24,8 @@ public class ProductFeedItem {
     @Field("feed_item_raw_text")
     private String feedItemRawText;
 
-    @Field("feed_item_image_url")
-    private String feedItemImageUrl;
-
     @Field("feed_item_submission_datetime")
     private Instant feedItemSubmissionDatetime;
-
-    @Field("feed_item_modified_datetime")
-    private Instant feedItemModifiedDatetime;
 
     @Field("feed_item_completion_datetime")
     private Instant feedItemCompletionDatetime;
