@@ -1,5 +1,6 @@
 package com.wm.domain.service;
 
+import com.wm.domain.model.FeedItemProcessingStatus;
 import com.wm.domain.model.ProductFeedItem;
 import com.wm.domain.port.in.ProductFeedItemUseCase;
 import com.wm.domain.port.out.ProductFeedItemRepositoryPort;
@@ -18,6 +19,8 @@ public class ProductFeedItemService implements ProductFeedItemUseCase {
     public void saveFeedItem(ProductFeedItem productFeedItem) {
         log.info("Saving product feed item with id: {}", productFeedItem.getId());
         try {
+            productFeedItem.setFeedItemCreationTime(java.time.Instant.now());
+            productFeedItem.setFeedItemStatus(String.valueOf(FeedItemProcessingStatus.ACCEPTED));
             feedItemRepository.saveFeedItem(productFeedItem);
             log.info("Product feed item saved successfully with id: {}", productFeedItem.getId());
         } catch (Exception e) {
