@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Data
@@ -15,37 +14,29 @@ public class ProductFeedItem {
     @Id
     private String id;
 
-    @Field("feedId")
-    private String feedId;
-
     @Field("feed_item_status")
     private String feedItemStatus;
 
     @Field("feed_item_raw_text")
     private String feedItemRawText;
 
-    @Field("feed_item_submission_datetime")
-    private Instant feedItemSubmissionDatetime;
+    @Field("feed_item_modification_datetime")
+    private Instant feedItemCreationTime;
 
-    @Field("feed_item_completion_datetime")
-    private Instant feedItemCompletionDatetime;
+    @Field("feed_item_update_datetime")
+    private Instant feedItemModificationTime;
 
     @Field("failure_reason")
     private String failureReason;
 
-    @Field("product_type_key")
-    private String productTypeKey;
+    @Field("product_type")
+    private String productType;
 
-    @Field("product_type_version")
-    private String productTypeVersion;
+    @Field("confidence_score")
+    private Double confidenceScore;
 
-    @Field("product_type_confidence_score")
-    private Double productTypeConfidenceScore;
+    @Field("product_attributes")
+    private Map<String, Object> productAttributes;
 
-    @Field("feed_item_structured_data")
-    private Map<String, Object> feedItemStructuredData;
-
-    @Field("feed_item_additional_data")
-    private Map<String, Object> feedItemAdditionalData;
 }
 

@@ -2,7 +2,7 @@ package com.wm.adapter.in.web;
 
 import com.wm.domain.model.ProductFeedItem;
 import com.wm.domain.port.in.ProductFeedItemUseCase;
-import com.wm.domain.port.in.ProductTypeClassificationUseCase;
+import com.wm.domain.port.in.ProductEnrichmentUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductFeedItemController {
 
     private final ProductFeedItemUseCase productFeedItemUseCase;
-    private final ProductTypeClassificationUseCase productTypeClassificationUseCase;
+    private final ProductEnrichmentUseCase productEnrichmentUseCase;
 
     /**
      * Endpoint to save a ProductFeedItem
@@ -57,10 +57,10 @@ public class ProductFeedItemController {
         return ResponseEntity.ok(productFeedItem);
     }
 
-    @PostMapping("/{feedItemId}/process/ptclassify")
+    @PostMapping("/{feedItemId}/classify")
     public ResponseEntity<String> processProductFeedItemPTClassification(@PathVariable("feedItemId") String feedItemId) {
         try {
-            productTypeClassificationUseCase.classifyProductType(feedItemId);
+            productEnrichmentUseCase.classifyProductType(feedItemId);
             log.info("Product Feed Item with id: {} classified successfully", feedItemId);
             return ResponseEntity.ok("Product Feed Item classified successfully");
         } catch (Exception e) {
@@ -68,4 +68,17 @@ public class ProductFeedItemController {
             return ResponseEntity.status(500).body("Failed to classify Product Feed Item");
         }
     }
+
+    @PostMapping("/{feedItemId}/extract")
+    public ResponseEntity<String> processProductFeedItemAttributeExtraction(@PathVariable("feedItemId") String feedItemId) {
+        try {
+            productEnrichmentUseCase.extractProductAttributes(feedItemId);
+            log.info("Product Feed Item with id: {} attributes extracted successfully", feedItemId);
+            return ResponseEntity.ok("Product Feed Item attributes extracted successfully");
+        } catch (Exception e) {
+            log.error("Error extracting attributes from Product Feed Item: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).body("Failed to extract attributes from Product Feed Item");
+        }
+    }
+
 }

@@ -9,10 +9,7 @@ import java.util.Optional;
 @Repository
 public interface ProductFeedItemRepository extends MongoRepository<ProductFeedItem, String> {
 
-    // Find all ProductFeedItems by feedItemId
-    ProductFeedItem findByFeedId(String productFeedItemId);
-
-    // Find a specific ProductFeedItem by both id and feedId
-    Optional<ProductFeedItem> findByIdAndFeedId(String id, String feedId);
+    // Find a specific ProductFeedItem by id
+    Optional<ProductFeedItem> findById(String id);
 
 }
