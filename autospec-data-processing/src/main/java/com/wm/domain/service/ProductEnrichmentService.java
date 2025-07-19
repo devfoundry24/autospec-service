@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -57,6 +58,30 @@ public class ProductEnrichmentService implements ProductEnrichmentUseCase {
             updateItemWithAttributes(item, attributes);
         }
         repositoryPort.saveFeedItem(item);
+    }
+
+    @Override
+    public boolean classifyProductTypeBatch(List<String> feedItemIds) {
+        for (String feedItemId : feedItemIds) {
+            try {
+                classifyProductType(feedItemId);
+            } catch (Exception e) {
+                log.error("Error classifying product type for feedItemId {}: {}", feedItemId, e.getMessage(), e);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean extractProductAttributesBatch(List<String> feedItemIds) {
+        for (String feedItemId : feedItemIds) {
+            try {
+                extractProductAttributes(feedItemId);
+            } catch (Exception e) {
+                log.error("Error extracting product attributes for feedItemId {}: {}", feedItemId, e.getMessage(), e);
+            }
+        }
+        return true;
     }
 
     /**

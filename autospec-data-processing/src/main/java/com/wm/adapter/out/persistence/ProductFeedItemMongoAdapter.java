@@ -1,9 +1,11 @@
 package com.wm.adapter.out.persistence;
 
+import com.wm.domain.model.FeedItemProcessingStatus;
 import com.wm.domain.model.ProductFeedItem;
 import com.wm.domain.port.out.ProductFeedItemRepositoryPort;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -30,5 +32,13 @@ public class ProductFeedItemMongoAdapter implements ProductFeedItemRepositoryPor
         }
         return productFeedItemRepository.findById(productFeedItemId)
                 .orElseThrow(() -> new IllegalArgumentException("ProductFeedItem not found for ID: " + productFeedItemId));
+    }
+
+    @Override
+    public List<ProductFeedItem> findByFeedItemStatus(FeedItemProcessingStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("FeedItemProcessingStatus cannot be null");
+        }
+        return productFeedItemRepository.findByFeedItemStatus(status);
     }
 }
