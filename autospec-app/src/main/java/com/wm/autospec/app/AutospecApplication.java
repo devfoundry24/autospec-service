@@ -1,13 +1,14 @@
 package com.wm.autospec.app;
 
-import com.wm.autospec.common.poc.AWSSecretsManagerClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @EnableMongoRepositories(basePackages = "com.wm")
 @ComponentScan(basePackages = "com.wm")
 @SpringBootApplication(scanBasePackages = "com.wm")
