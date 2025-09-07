@@ -1,9 +1,6 @@
 package com.wm.adapter.out.llm;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wm.common.constants.LLMConstants;
-import com.wm.common.util.LLMUtils;
+import com.wm.common.utils.LLMUtils;
 import com.wm.domain.port.out.LLMClientPort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;

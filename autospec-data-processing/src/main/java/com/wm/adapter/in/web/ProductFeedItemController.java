@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -42,7 +41,7 @@ public class ProductFeedItemController {
             ProductFeedItem productFeedItem = ProductFeedItemRequestMapper.toDomain(productFeedItemDto);
             productFeedItemUseCase.saveFeedItem(productFeedItem);
             log.info("Controller Saved ProductFeedItem with id: {}", productFeedItem.getId());
-            return ResponseEntity.ok("ProductFeedItem saved successfully");
+            return ResponseEntity.ok("ProductFeedItem : "+feedItemId+" saved successfully ");
         } catch (Exception e) {
             log.error("Error saving ProductFeedItem: {}", e.getMessage(), e);
             return ResponseEntity.status(500).body("Failed to save ProductFeedItem");

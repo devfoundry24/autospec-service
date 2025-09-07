@@ -7,6 +7,7 @@ import java.util.Map;
 @Data
 public class ProductFeedItemResponseDTO {
     private String feedItemId;
+    private String productDescription;
     private String status;
     private String productType;
     private Double confidenceScore;
