@@ -7,7 +7,7 @@ import java.time.Instant;
 
 @Data
 public class ProductFeedItemRequestDTO {
-    private String id;
+    private String feedItemId;
     private String productDescription;
     private String productImageUrl;
     private Instant timeStamp;

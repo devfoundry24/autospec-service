@@ -1,4 +1,4 @@
-package com.wm.common.util;
+package com.wm.common.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,13 +13,13 @@ public final class LLMUtils {
     static {
         // Supported Product Types
         SUPPORTED_PRODUCT_TYPES.addAll(List.of(
-                "athleticshoes",
-                "laptop",
-                "tshirt"
+                "athletic_shoes",
+                "laptop_computers",
+                "polo_tshirt"
         ));
 
         // Attribute templates per Product Type
-        PRODUCT_ATTRIBUTE_TEMPLATES.put("athleticshoes", Map.of(
+        PRODUCT_ATTRIBUTE_TEMPLATES.put("athletic_shoes", Map.of(
                 "brand", "",
                 "color", "",
                 "size", "",
@@ -32,7 +32,7 @@ public final class LLMUtils {
                 "soleMaterial", ""
         ));
 
-        PRODUCT_ATTRIBUTE_TEMPLATES.put("laptop", Map.of(
+        PRODUCT_ATTRIBUTE_TEMPLATES.put("laptop_computers", Map.of(
                 "brand", "",
                 "processor", "",
                 "ram", "",
@@ -44,7 +44,7 @@ public final class LLMUtils {
                 "fingerprintReader", ""
         ));
 
-        PRODUCT_ATTRIBUTE_TEMPLATES.put("tshirt", Map.of(
+        PRODUCT_ATTRIBUTE_TEMPLATES.put("polo_tshirt", Map.of(
                 "brand", "",
                 "gender", "",
                 "color", "",

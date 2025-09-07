@@ -16,9 +16,10 @@ public class ProductFeedItemRequestMapper {
             return null;
         }
         ProductFeedItem item = new ProductFeedItem();
-        item.setId(dto.getId());
+        item.setId(dto.getFeedItemId());
         item.setFeedItemRawText(dto.getProductDescription());
-        item.setFeedItemCreationTime(dto.getTimeStamp());
+        //If time is null then pass current time
+        item.setFeedItemCreationTime(dto.getTimeStamp() != null ? dto.getTimeStamp(): java.time.Instant.now());
         return item;
     }
 }

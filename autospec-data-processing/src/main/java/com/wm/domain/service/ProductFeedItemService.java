@@ -7,8 +7,6 @@ import com.wm.domain.port.out.ProductFeedItemRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
-
 @Slf4j
 @RequiredArgsConstructor
 public class ProductFeedItemService implements ProductFeedItemUseCase {
