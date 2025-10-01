@@ -21,12 +21,16 @@ public class OpenRouterAdapter implements LLMClientPort {
     @Value("${openrouter.api.model.name}")
     private String modelName;
 
+    @Value("${openrouter.api.image.model.name}")
+    private String imageModelName;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public String getProductTypeFromLLM(String productDescription) {
         String prompt = LLMUtils.generateProductTypePrompt(productDescription);
-        String requestBody = buildRequestBody(prompt);
+        // same body structure as before (user-only text message)
+        String requestBody = LLMUtils.buildTextRequestBody(modelName, prompt, null, null);
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);
@@ -35,14 +39,59 @@ public class OpenRouterAdapter implements LLMClientPort {
     }
 
     @Override
-    public Map<String,Object> getProductAttributesFromLLM(String productDescription, String productType) {
-        String prompt =  LLMUtils.generateAttributeExtractionPrompt(productDescription,productType);
-        String requestBody = buildRequestBody(prompt);
+    public Map<String, Object> getProductAttributesFromLLM(String productDescription, String productType) {
+        String prompt = LLMUtils.generateAttributeExtractionPrompt(productDescription, productType);
+        // same body structure as before (user-only text message)
+        String requestBody = LLMUtils.buildTextRequestBody(modelName, prompt, null, null);
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, buildHeaders());
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);
 
-        return LLMUtils.extractProductAttributesFromResponse(response.getBody());  // Return full JSON content from LLM
+        return LLMUtils.extractProductAttributesFromResponse(response.getBody());
+    }
+
+    @Override
+    public String getProductTypeFromImage(String imageData) {
+        // Preserve original behavior: temperature=0.1, system role + user text listing supported types
+        String systemPrompt = "You classify retail product images.";
+        String userText = LLMUtils.generateProductTypePromptForImage(); // dynamically lists supported types
+        String requestBody = LLMUtils.buildImageRequestBody(
+                imageModelName,
+                systemPrompt,
+                userText,
+                imageData,
+                0.1,
+                null // no response_format
+        );
+
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, buildHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);
+
+        String responseBody = response.getBody();
+        if (responseBody == null) {
+            throw new IllegalStateException("API response body is null");
+        }
+        return LLMUtils.extractProductTypeFromResponse(responseBody);
+    }
+
+    @Override
+    public Map<String, Object> getProductAttributesFromImage(String imageData) {
+        // Preserve original behavior: temperature=0.2, response_format=json_object, system role + strict JSON-only text
+        String systemPrompt = "You extract retail product attributes from images. Reply with ONLY valid JSON that matches the schema.";
+        String userText = LLMUtils.generateGenericImageAttributeExtractionPrompt();
+        String requestBody = LLMUtils.buildImageRequestBody(
+                imageModelName,
+                systemPrompt,
+                userText,
+                imageData,
+                0.2,
+                "json_object"
+        );
+
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, buildHeaders());
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);
+
+        return LLMUtils.extractProductAttributesFromResponse(response.getBody());
     }
 
     private HttpHeaders buildHeaders() {
@@ -50,28 +99,5 @@ public class OpenRouterAdapter implements LLMClientPort {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(apiKey);
         return headers;
-    }
-
-    private String buildRequestBody(String prompt) {
-        return String.format("""
-            {
-              "model": "%s",
-              "messages": [
-                {
-                  "role": "user",
-                  "content": [
-                    {
-                      "type": "text",
-                      "text": "%s"
-                    }
-                  ]
-                }
-              ]
-            }
-            """, modelName, escapeJson(prompt));
-    }
-
-    private String escapeJson(String input) {
-        return input.replace("\"", "\\\"").replace("\n", "\\n");
     }
 }

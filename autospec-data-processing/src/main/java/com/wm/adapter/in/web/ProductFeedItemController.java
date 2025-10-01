@@ -14,6 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// CORS configuration to allow requests from your HTML's origin
+@CrossOrigin(
+        origins = "http://localhost:63342/",   // your HTML’s origin (scheme+host+port)
+        allowedHeaders = "*",
+        methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS },
+        allowCredentials = "true"            // only if you actually send cookies/auth
+)
 @RestController
 @RequestMapping("/autospec/api/v1/feedItem")
 @Slf4j
@@ -37,7 +44,6 @@ public class ProductFeedItemController {
 
         log.info("Controller Received ProductFeedItem: {}", productFeedItemDto);
         try {
-            //Manual Mapper
             ProductFeedItem productFeedItem = ProductFeedItemRequestMapper.toDomain(productFeedItemDto);
             productFeedItemUseCase.saveFeedItem(productFeedItem);
             log.info("Controller Saved ProductFeedItem with id: {}", productFeedItem.getId());

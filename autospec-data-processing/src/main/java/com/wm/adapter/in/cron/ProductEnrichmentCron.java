@@ -24,11 +24,11 @@ public class ProductEnrichmentCron {
      * Scheduled task that runs every minute to classify and extract attributes
      * for product feed items with the status "ACCEPTED".
      **/
-    @Scheduled(cron = "0 0/1 * * * ?") // Every 1 minute
+    @Scheduled(cron = "0/30 * * * * ?") // Every 30 seconds
     public void runClassificationAndExtraction() {
         log.info("🚀 Starting Cron Job: Classification + Attribute Extraction");
 
-        // Fetch all feed items with status "IN_PROGRESS"
+        // Fetch all feed items with status "ACCEPTED"
         List<ProductFeedItem> items = feedItemRepository.findByFeedItemStatus(FeedItemProcessingStatus.ACCEPTED);
         //If no items found, log and exit
         if (CollectionUtils.isEmpty(items)) {
@@ -39,13 +39,23 @@ public class ProductEnrichmentCron {
         for (ProductFeedItem item : items) {
             String id = item.getId();
             try {
-                log.info("➡️ Classifying ProductType for feedId: {}", id);
-                productEnrichmentUseCase.classifyProductType(id);
+                if(item.getFeedItemImageData() == null || item.getFeedItemImageData().isEmpty()) {
+                    log.info("➡️ Classifying ProductType for feedId: {}", id);
+                    productEnrichmentUseCase.classifyProductType(id);
 
-                log.info("➡️ Extracting Attributes for feedId: {}", id);
-                productEnrichmentUseCase.extractProductAttributes(id);
+                    log.info("➡️ Extracting Attributes for feedId: {}", id);
+                    productEnrichmentUseCase.extractProductAttributes(id);
 
-                log.info("✅ Done processing feedId: {}", id);
+                    log.info("✅ Done processing feedId: {}", id);
+                }else{
+                    log.info("➡️ Classifying ProductType from Image for feedId: {}", id);
+                    productEnrichmentUseCase.classifyProductTypeFromImage(id);
+
+                    log.info("➡️ Extracting Attributes from Image for feedId: {}", id);
+                    productEnrichmentUseCase.extractProductAttributesFromImage(id);
+
+                    log.info("✅ Done processing feedId: {}", id);
+                }
             } catch (Exception e) {
                 log.error("❌ Error processing feedId {}: {}", id, e.getMessage(), e);
             }

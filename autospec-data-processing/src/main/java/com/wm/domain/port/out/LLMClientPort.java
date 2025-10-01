@@ -31,4 +31,29 @@ public interface LLMClientPort {
      */
     Map<String,Object> getProductAttributesFromLLM(String productDescription, String productType);
 
+    /**
+     * Retrieves the product type from an image using the LLM (Large Language Model).
+     *
+     * This method generates a prompt using the provided image data, builds a request body,
+     * and sends a POST request to the LLM API. The response is then processed to extract
+     * the product type.
+     *
+     * @param imageData A base64-encoded string representing the image data of the product.
+     * @return The product type as a string, extracted from the LLM's response.
+     */
+    String getProductTypeFromImage(String imageData);
+
+    /**
+     * Retrieves product attributes from an image using the LLM (Large Language Model).
+     *
+     * This method generates a prompt using the provided image data, builds a request body,
+     * and sends a POST request to the LLM API. The response is then processed to extract
+     * the product attributes.
+     *
+     * @param imageData A base64-encoded string representing the image data of the product.
+     * @return A JSON string containing the product attributes as returned by the LLM.
+     */
+    Map<String,Object> getProductAttributesFromImage(String imageData);
+
+
 }

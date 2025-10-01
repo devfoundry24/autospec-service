@@ -126,4 +126,63 @@ public class ProductEnrichmentService implements ProductEnrichmentUseCase {
         item.setFeedItemStatus(FeedItemProcessingStatus.ATTRIBUTE_EXTRACTION_COMPLETED.toString());
     }
 
+    @Override
+    public void classifyProductTypeFromImage(String feedItemId) {
+        ProductFeedItem item = repositoryPort.findByFeedItemId(feedItemId);
+        if (item == null) {
+            log.warn("Feed item with ID {} not found", feedItemId);
+            return;
+        }
+        if (item.getFeedItemImageData() == null || item.getFeedItemImageData().isEmpty()) {
+            log.warn("No image data found for feed item with ID {}", feedItemId);
+            updateItemWithFailure(item, "[Unknown]", FeedItemProcessingStatus.PT_CLASSIFICATION_FAILED, "No image data available");
+            repositoryPort.saveFeedItem(item);
+            return;
+        }
+        try {
+            // Classify product type from the image data using LLMClientPort
+            String productType = llmClientPort.getProductTypeFromImage(item.getFeedItemImageData());
+            if (productType == null || productType.isEmpty()) {
+                log.warn("No product type extracted from image for feed item with ID {}", feedItemId);
+                updateItemWithFailure(item, "[Unknown]", FeedItemProcessingStatus.PT_CLASSIFICATION_FAILED, "No product type extracted from image");
+            } else {
+                updateItemWithSuccess(item, productType, FeedItemProcessingStatus.PT_CLASSIFICATION_COMPLETED);
+            }
+        } catch (Exception e) {
+            log.error("Error classifying product type from image for feed item with ID {}: {}", feedItemId, e.getMessage(), e);
+            updateItemWithFailure(item, "[Unknown]", FeedItemProcessingStatus.PT_CLASSIFICATION_FAILED, "Error during product type classification from image");
+        }
+        repositoryPort.saveFeedItem(item);
+    }
+
+    @Override
+    public void extractProductAttributesFromImage(String feedItemId) {
+        ProductFeedItem item = repositoryPort.findByFeedItemId(feedItemId);
+        if (item == null) {
+            log.warn("Feed item with ID {} not found", feedItemId);
+            return;
+        }
+        if (item.getFeedItemImageData() == null || item.getFeedItemImageData().isEmpty()) {
+            log.warn("No image data found for feed item with ID {}", feedItemId);
+            updateItemWithFailure(item, Map.of("error", "No image data"), FeedItemProcessingStatus.ATTRIBUTE_EXTRACTION_FAILED, "No image data available");
+            repositoryPort.saveFeedItem(item);
+            return;
+        }
+
+        try {
+            // Extract attributes from the image data using LLMClientPort
+            Map<String, Object> attributes = llmClientPort.getProductAttributesFromImage(item.getFeedItemImageData());
+            if (attributes == null || attributes.isEmpty()) {
+                log.warn("No attributes extracted from image for feed item with ID {}", feedItemId);
+                updateItemWithFailure(item, Map.of("error", "No attributes extracted"), FeedItemProcessingStatus.ATTRIBUTE_EXTRACTION_FAILED, "No attributes extracted from image");
+            } else {
+                updateItemWithAttributes(item, attributes);
+            }
+        } catch (Exception e) {
+            log.error("Error extracting attributes from image for feed item with ID {}: {}", feedItemId, e.getMessage(), e);
+            updateItemWithFailure(item, Map.of("error", e.getMessage()), FeedItemProcessingStatus.ATTRIBUTE_EXTRACTION_FAILED, "Error during attribute extraction from image");
+        }
+        repositoryPort.saveFeedItem(item);
+    }
+
 }
