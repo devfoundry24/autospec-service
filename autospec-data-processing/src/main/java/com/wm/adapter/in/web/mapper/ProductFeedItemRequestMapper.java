@@ -18,6 +18,7 @@ public class ProductFeedItemRequestMapper {
         ProductFeedItem item = new ProductFeedItem();
         item.setId(dto.getFeedItemId());
         item.setFeedItemRawText(dto.getProductDescription());
+        item.setFeedItemImageData(dto.getProductImageData());
         //If time is null then pass current time
         item.setFeedItemCreationTime(dto.getTimeStamp() != null ? dto.getTimeStamp(): java.time.Instant.now());
         return item;

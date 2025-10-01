@@ -20,6 +20,9 @@ public class ProductFeedItem {
     @Field("feed_item_raw_text")
     private String feedItemRawText;
 
+    @Field("feed_item_image_data")
+    private String feedItemImageData;
+
     @Field("feed_item_modification_datetime")
     private Instant feedItemCreationTime;
 

@@ -49,4 +49,24 @@ public interface ProductEnrichmentUseCase {
      */
     boolean extractProductAttributesBatch(List<String> feedItemIds);
 
+    /**
+     * Classifies the product type from the image data of the given feed item.
+     *
+     * This method processes the feed item identified by the provided ID
+     * and classifies its product type using image recognition techniques.
+     *
+     * @param feedItemId The unique identifier of the feed item to classify from its image.
+     */
+    void classifyProductTypeFromImage(String feedItemId);
+
+    /**
+     * Extracts product attributes from the image data of the given feed item.
+     *
+     * This method processes the feed item identified by the provided ID
+     * and extracts its attributes using image recognition techniques.
+     *
+     * @param feedItemId The unique identifier of the feed item to extract attributes from its image.
+     */
+    void extractProductAttributesFromImage(String feedItemId);
+
 }
