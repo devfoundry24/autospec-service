@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -21,7 +22,7 @@ public class ProductFeedItem {
     private String feedItemRawText;
 
     @Field("feed_item_image_data")
-    private String feedItemImageData;
+    private List<String> feedItemImageData;
 
     @Field("feed_item_modification_datetime")
     private Instant feedItemCreationTime;

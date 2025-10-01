@@ -231,7 +231,7 @@ public final class LLMUtils {
     public static String buildImageRequestBody(String model,
                                                String systemPrompt,
                                                String userText,
-                                               String imageUrl,
+                                               List<String> imageUrls,
                                                Double temperatureOrNull,
                                                String responseFormatType) {
         StringBuilder sb = new StringBuilder();
@@ -242,26 +242,38 @@ public final class LLMUtils {
             sb.append("  \"temperature\": ").append(temperatureOrNull).append(",\n");
         }
         if (responseFormatType != null && !responseFormatType.isBlank()) {
-            sb.append("  \"response_format\": {\"type\":\"").append(escapeJson(responseFormatType)).append("\"},\n");
+            sb.append("  \"response_format\": {\"type\":\"")
+                    .append(escapeJson(responseFormatType)).append("\"},\n");
         }
 
-        sb.append("  \"messages\": [\n")
-                .append("    {\n")
-                .append("      \"role\": \"system\",\n")
-                .append("      \"content\": \"").append(escapeJson(systemPrompt)).append("\"\n")
-                .append("    },\n")
-                .append("    {\n")
+        sb.append("  \"messages\": [\n");
+
+        if (systemPrompt != null && !systemPrompt.isBlank()) {
+            sb.append("    {\n")
+                    .append("      \"role\": \"system\",\n")
+                    .append("      \"content\": \"").append(escapeJson(systemPrompt)).append("\"\n")
+                    .append("    },\n");
+        }
+
+        sb.append("    {\n")
                 .append("      \"role\": \"user\",\n")
                 .append("      \"content\": [\n")
                 .append("        {\n")
                 .append("          \"type\": \"text\",\n")
                 .append("          \"text\": \"").append(escapeJson(userText)).append("\"\n")
-                .append("        },\n")
-                .append("        {\n")
-                .append("          \"type\": \"image_url\",\n")
-                .append("          \"image_url\": { \"url\": \"").append(escapeJson(imageUrl)).append("\" }\n")
-                .append("        }\n")
-                .append("      ]\n")
+                .append("        }");
+
+        if (imageUrls != null) {
+            for (String url : imageUrls) {
+                sb.append(",\n        {\n")
+                        .append("          \"type\": \"image_url\",\n")
+                        .append("          \"image_url\": { \"url\": \"")
+                        .append(escapeJson(url)).append("\" }\n")
+                        .append("        }");
+            }
+        }
+
+        sb.append("\n      ]\n")
                 .append("    }\n")
                 .append("  ]\n")
                 .append("}\n");

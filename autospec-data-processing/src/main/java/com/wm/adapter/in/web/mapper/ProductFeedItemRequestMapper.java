@@ -3,6 +3,8 @@ package com.wm.adapter.in.web.mapper;
 import com.wm.adapter.in.web.dto.ProductFeedItemRequestDTO;
 import com.wm.domain.model.ProductFeedItem;
 
+import java.util.List;
+
 public class ProductFeedItemRequestMapper {
 
     /**
@@ -18,7 +20,9 @@ public class ProductFeedItemRequestMapper {
         ProductFeedItem item = new ProductFeedItem();
         item.setId(dto.getFeedItemId());
         item.setFeedItemRawText(dto.getProductDescription());
-        item.setFeedItemImageData(dto.getProductImageData());
+        item.setFeedItemImageData(
+                dto.getProductImageDataList() != null ? dto.getProductImageDataList() : List.of()
+        );
         //If time is null then pass current time
         item.setFeedItemCreationTime(dto.getTimeStamp() != null ? dto.getTimeStamp(): java.time.Instant.now());
         return item;

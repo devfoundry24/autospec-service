@@ -2,6 +2,7 @@ package com.wm.domain.port.out;
 
 import org.bson.json.JsonObject;
 
+import java.util.List;
 import java.util.Map;
 
 public interface LLMClientPort {
@@ -41,7 +42,7 @@ public interface LLMClientPort {
      * @param imageData A base64-encoded string representing the image data of the product.
      * @return The product type as a string, extracted from the LLM's response.
      */
-    String getProductTypeFromImage(String imageData);
+    String getProductTypeFromImage(List<String> imageData);
 
     /**
      * Retrieves product attributes from an image using the LLM (Large Language Model).
@@ -53,7 +54,7 @@ public interface LLMClientPort {
      * @param imageData A base64-encoded string representing the image data of the product.
      * @return A JSON string containing the product attributes as returned by the LLM.
      */
-    Map<String,Object> getProductAttributesFromImage(String imageData, String productType);
+    Map<String,Object> getProductAttributesFromImage(List<String> imageData, String productType);
 
 
 }

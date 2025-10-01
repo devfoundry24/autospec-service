@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -51,7 +52,7 @@ public class OpenRouterAdapter implements LLMClientPort {
     }
 
     @Override
-    public String getProductTypeFromImage(String imageData) {
+    public String getProductTypeFromImage(List<String> imageData) {
         // Preserve original behavior: temperature=0.1, system role + user text listing supported types
         String systemPrompt = "You classify retail product images.";
         String userText = LLMUtils.generateProductTypePromptForImage(); // dynamically lists supported types
@@ -75,7 +76,7 @@ public class OpenRouterAdapter implements LLMClientPort {
     }
 
     @Override
-    public Map<String, Object> getProductAttributesFromImage(String imageData, String productType) {
+    public Map<String, Object> getProductAttributesFromImage(List<String> imageData, String productType) {
         // Preserve original behavior: temperature=0.2, response_format=json_object, system role + strict JSON-only text
         String systemPrompt = "You extract retail product attributes from images. Reply with ONLY valid JSON that matches the schema.";
         String userText = LLMUtils.generateGenericImageAttributeExtractionPrompt(productType);
