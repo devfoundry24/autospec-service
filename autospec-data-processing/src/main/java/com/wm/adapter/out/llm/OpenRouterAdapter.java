@@ -75,10 +75,10 @@ public class OpenRouterAdapter implements LLMClientPort {
     }
 
     @Override
-    public Map<String, Object> getProductAttributesFromImage(String imageData) {
+    public Map<String, Object> getProductAttributesFromImage(String imageData, String productType) {
         // Preserve original behavior: temperature=0.2, response_format=json_object, system role + strict JSON-only text
         String systemPrompt = "You extract retail product attributes from images. Reply with ONLY valid JSON that matches the schema.";
-        String userText = LLMUtils.generateGenericImageAttributeExtractionPrompt();
+        String userText = LLMUtils.generateGenericImageAttributeExtractionPrompt(productType);
         String requestBody = LLMUtils.buildImageRequestBody(
                 imageModelName,
                 systemPrompt,

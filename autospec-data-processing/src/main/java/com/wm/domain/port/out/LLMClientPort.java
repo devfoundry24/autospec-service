@@ -53,7 +53,7 @@ public interface LLMClientPort {
      * @param imageData A base64-encoded string representing the image data of the product.
      * @return A JSON string containing the product attributes as returned by the LLM.
      */
-    Map<String,Object> getProductAttributesFromImage(String imageData);
+    Map<String,Object> getProductAttributesFromImage(String imageData, String productType);
 
 
 }

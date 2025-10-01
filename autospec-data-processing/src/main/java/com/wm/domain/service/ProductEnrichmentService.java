@@ -171,7 +171,7 @@ public class ProductEnrichmentService implements ProductEnrichmentUseCase {
 
         try {
             // Extract attributes from the image data using LLMClientPort
-            Map<String, Object> attributes = llmClientPort.getProductAttributesFromImage(item.getFeedItemImageData());
+            Map<String, Object> attributes = llmClientPort.getProductAttributesFromImage(item.getFeedItemImageData(), item.getProductType());
             if (attributes == null || attributes.isEmpty()) {
                 log.warn("No attributes extracted from image for feed item with ID {}", feedItemId);
                 updateItemWithFailure(item, Map.of("error", "No attributes extracted"), FeedItemProcessingStatus.ATTRIBUTE_EXTRACTION_FAILED, "No attributes extracted from image");

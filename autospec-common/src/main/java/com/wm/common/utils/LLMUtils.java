@@ -144,20 +144,31 @@ public final class LLMUtils {
      * (so behavior does not change). This is intentionally generic and strict
      * about JSON-only output.
      */
-    public static String generateGenericImageAttributeExtractionPrompt() {
-        return """
-            Extract product attributes from this image and return ONLY the following JSON: {\"productAttributes\":{\"brand\":\"\",\"color\":\"\",\"size\":\"\",\"material\":\"\",\"gender\":\"\",\"ageGroup\":\"\",\"pattern\":\"\",\"sport\":\"\",\"shoeClosure\":\"\",\"soleMaterial\":\"\"},\"confidenceScore\":0-1}. Rules: (1) If an attribute is not visible/uncertain, leave it as an empty string. (2) Prefer visible marks/labels and readable text on the product/pack. (3) Do not infer sizes from proportions. (4) Output JSON only—no extra text.
-            """;
-    }
+    public static String generateGenericImageAttributeExtractionPrompt(String productType) {
+        // 1) Get attribute template for this product type
+        Map<String, String> attributes = getAttributeTemplateForProductType(productType);
 
-    /**
-     * An alternative, more extensive schema (kept from your earlier helper).
-     * Not used by the adapter right now, but available if needed.
-     */
-    public static String generateImageAttributeExtractionPrompt() {
+        // 2) Build JSON schema from keys
+        StringBuilder jsonSchema = new StringBuilder();
+        jsonSchema.append("{\n");
+        int i = 0, n = attributes.size();
+        for (String key : attributes.keySet()) {
+            jsonSchema.append("  \"").append(escapeJson(key)).append("\": \"\"");
+            if (i < n - 1) jsonSchema.append(",");
+            jsonSchema.append("\n");
+            i++;
+        }
+        jsonSchema.append("}");
+
+        // 3) Return the same prompt text as before, only schema varies
         return """
-            Extract product_type, product_attributes, and confidence_score from this image. Use this exact JSON schema: {\"product_type\":\"string\",\"product_attributes\":{\"brand\":\"string\",\"model\":\"string\",\"color\":\"string\",\"material\":\"string\",\"gender\":\"string\",\"size\":\"string\",\"shoeType\":\"string\",\"closureType\":\"string\",\"soleMaterial\":\"string\",\"sport\":\"string\",\"ageGroup\":\"string\",\"pattern\":\"string\"},\"confidence_score\":0-100}. Rules: (1) If any field is not visible/uncertain, set it to \"\". (2) Never guess sizes from proportions; only use visible labels. (3) Prefer visual marks and readable text on the product/package; avoid brand stereotypes. (4) Output JSON only—no markdown or prose.
-            """;
+                Extract product attributes from this image and return ONLY a JSON object with EXACTLY TWO top-level keys: "productAttributes" and "confidenceScore". 
+                All extracted product attribute keys MUST be nested INSIDE "productAttributes". 
+                If an attribute is not visible or uncertain, set it to an empty string "". 
+                Provide "confidenceScore" as a number between 0 and 1 representing overall confidence. 
+        JSON schema:
+        %s
+        """.formatted(jsonSchema.toString());
     }
 
     // -----------------------------
