@@ -1,33 +1,122 @@
+# ===============================
+# Java / Maven / Spring Boot
+# ===============================
 HELP.md
 target/
+logs/
+*.log
+*.out
+*.tmp
+*.pid
+*.gz
+
+# Ignore Maven wrapper except jar
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### STS ###
+# Ignore build dirs from Gradle/NetBeans (if any)
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# Compiled class files
+*.class
+
+# ===============================
+# OS-specific files
+# ===============================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.Trash-*
+.nfs*
+
+# ===============================
+# IDEs & Editors
+# ===============================
+# --- Eclipse / STS ---
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### IntelliJ IDEA ###
-.idea
+# --- IntelliJ IDEA ---
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
+.idea_modules/
+.idea/httpRequests/
 
-### NetBeans ###
+# --- NetBeans ---
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+# --- VS Code ---
 .vscode/
+
+# --- JetBrains Fleet ---
+.fleet/
+
+# --- Common editor backups ---
+*.swp
+*.swo
+*~
+
+# ===============================
+# Environment / Credentials
+# ===============================
+.env
+.env.*
+*.secret
+*.key
+*.pem
+*.crt
+*.csr
+*.keystore
+*.jks
+
+# ===============================
+# Testing & Reports
+# ===============================
+test-output/
+surefire-reports/
+jacoco.exec
+*.hprof
+
+# ===============================
+# Miscellaneous
+# ===============================
+# Temporary files created by tools
+tmp/
+temp/
+cache/
+*.bak
+*.old
+*.orig
+
+# ===============================
+# Node / Frontend (if UI sub-modules exist)
+# ===============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json

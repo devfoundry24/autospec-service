@@ -1,0 +1,237 @@
+openapi: 3.0.3
+info:
+  title: Autospec Service API
+  version: 1.0.0
+  description: >
+    Attribute extraction and product type classification for product feed items.
+    Backed by Spring Boot multi-module project (Gemma & Grok pipelines).
+servers:
+  - url: http://localhost:8088
+tags:
+  - name: ProductFeedItem
+    description: Create, fetch, classify, and extract attributes for feed items.
+
+paths:
+  /autospec/api/v1/feedItem/{feedItemId}:
+    post:
+      tags: [ProductFeedItem]
+      summary: Save a ProductFeedItem
+      description: Creates or upserts a ProductFeedItem with the provided payload.
+      parameters:
+        - name: feedItemId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductFeedItemRequestDTO'
+      responses:
+        '200':
+          description: Saved successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Failed to save ProductFeedItem
+          content:
+            text/plain:
+              schema:
+                type: string
+
+    get:
+      tags: [ProductFeedItem]
+      summary: Get ProductFeedItem by id
+      parameters:
+        - name: feedItemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The ProductFeedItem as DTO
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductFeedItemResponseDTO'
+        '404':
+          description: Not found
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /autospec/api/v1/feedItem/{feedItemId}/classify:
+    post:
+      tags: [ProductFeedItem]
+      summary: Classify product type for a single feed item
+      parameters:
+        - name: feedItemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Classification triggered/completed
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Classification failed
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /autospec/api/v1/feedItem/{feedItemId}/extract:
+    post:
+      tags: [ProductFeedItem]
+      summary: Extract product attributes for a single feed item
+      parameters:
+        - name: feedItemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Attribute extraction triggered/completed
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Attribute extraction failed
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /autospec/api/v1/feedItem/classify/batch:
+    post:
+      tags: [ProductFeedItem]
+      summary: Batch classify product type for multiple feed items
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedItemIdList'
+            example: ["FI-001","FI-002","FI-003"]
+      responses:
+        '200':
+          description: Batch classification completed
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Batch classification failed
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /autospec/api/v1/feedItem/extract/batch:
+    post:
+      tags: [ProductFeedItem]
+      summary: Batch extract product attributes for multiple feed items
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedItemIdList'
+            example: ["FI-010","FI-011"]
+      responses:
+        '200':
+          description: Batch attribute extraction completed
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: Batch attribute extraction failed
+          content:
+            text/plain:
+              schema:
+                type: string
+
+components:
+  schemas:
+    ProductFeedItemRequestDTO:
+      type: object
+      required: [feedItemId, productDescription]
+      properties:
+        feedItemId:
+          type: string
+          description: Identifier of the feed item (also used as document id)
+          example: "FI-12345"
+        productDescription:
+          type: string
+          description: Raw text description of the product
+          example: "4-pack microfiber cleaning cloths, lint-free, 30x30 cm."
+        timeStamp:
+          type: string
+          format: date-time
+          description: Creation time; if omitted, server uses current time
+          example: "2025-10-28T14:32:11Z"
+        productImageDataList:
+          type: array
+          description: Base64-encoded image strings or URLs, depending on ingestion strategy
+          items:
+            type: string
+
+    ProductFeedItemResponseDTO:
+      type: object
+      properties:
+        feedItemId:
+          type: string
+          example: "FI-12345"
+        productDescription:
+          type: string
+          example: "4-pack microfiber cleaning cloths, lint-free, 30x30 cm."
+        status:
+          type: string
+          description: Processing status of the feed item
+          example: "EXTRACTED"
+        productType:
+          type: string
+          description: Classified product type/category
+          example: "Household Cleaning"
+        confidenceScore:
+          type: number
+          format: double
+          description: Confidence score of classification (0..1 or percentage as configured)
+          example: 0.91
+        productAttributes:
+          type: object
+          additionalProperties: true
+          description: Extracted name–value pairs (dynamic schema)
+          example:
+            brand: "CleanX"
+            count: 4
+            material: "microfiber"
+            color: "assorted"
+            size: "30x30 cm"
+        creationTime:
+          type: string
+          format: date-time
+          example: "2025-10-28T14:32:11Z"
+        modificationTime:
+          type: string
+          format: date-time
+          example: "2025-10-28T14:40:03Z"
+
+    FeedItemIdList:
+      type: array
+      items:
+        type: string
+      description: List of feed item IDs to process
