@@ -24,7 +24,7 @@ public class ProductEnrichmentCron {
      * Scheduled task that runs every minute to classify and extract attributes
      * for product feed items with the status "ACCEPTED".
      **/
-    @Scheduled(cron = "0/30 * * * * ?") // Every 30 seconds
+    @Scheduled(cron = "0/20 * * * * ?") // Every 20 seconds
     public void runClassificationAndExtraction() {
         log.info("🚀 Starting Cron Job: Classification + Attribute Extraction");
 

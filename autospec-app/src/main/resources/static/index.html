@@ -7,86 +7,186 @@
   <style>
     :root{
       --bg:#0f172a; --panel:#111827; --soft:#1f2937;
-      --text:#e5e7eb; --muted:#9ca3af; --brand:#3b82f6; --brand2:#60a5fa;
-      --ok:#10b981; --err:#ef4444; --radius:16px;
+      --text:#e5e7eb; --muted:#9ca3af; --brand:#5B9BFF; --brand2:#82B3FF;
+      --ok:#10b981; --err:#ef4444; --radius:14px;
       --shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
       --panel-h: 680px;
     }
+
     *{box-sizing:border-box} html,body{height:100%}
+
     body{
-      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(1000px 600px at 10% -10%, rgba(59,130,246,.25), transparent 50%),
-                  radial-gradient(900px 500px at 110% 10%, rgba(16,185,129,.18), transparent 50%),
-                  var(--bg);
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 15% -10%, rgba(91,155,255,.20), transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, rgba(34,197,94,.14), transparent 55%),
+        linear-gradient(180deg, #0a0f1c, #0b1020 30%, #0b1020 70%, #0a0f1c);
       color:var(--text); line-height:1.45;
     }
-    .container{ max-width:1200px; margin:48px auto; padding:0 20px; }
-    h1{ font-size:28px; margin:0 0 20px }
 
-    .split{ display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:stretch; }
+    .container{ max-width:1200px; margin:56px auto; padding:0 20px; }
+    h1{
+      font-size:28px; margin:0 0 24px;
+      font-weight:700; letter-spacing:.02em; color:#eaf1ff;
+      text-shadow:0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .split{ display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:stretch; }
     @media (max-width: 900px){ .split{ grid-template-columns:1fr } }
 
     .panel{
-      background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.015));
+      background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
       border:1px solid rgba(255,255,255,.08);
       border-radius: var(--radius); box-shadow: var(--shadow);
       overflow:hidden; display:flex; flex-direction:column; height:var(--panel-h);
+      backdrop-filter:blur(6px);
     }
     .panel header{
-      padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.07);
+      padding:16px 20px;
+      border-bottom:1px solid rgba(255,255,255,.07);
       display:flex; align-items:center; justify-content:space-between;
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.0));
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
     }
-    .panel header h3{ margin:0; font-size:16px; font-weight:700; letter-spacing:.2px; }
-    .status{ font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); color:#cbd5e1; }
+    .panel header h3{ margin:0; font-size:16px; font-weight:650; letter-spacing:.04em; }
 
-    .body{ padding:16px; display:flex; gap:12px; flex-direction:column; overflow:auto; }
-    label{ font-size:13px; color:#cbd5e1; margin-bottom:4px; display:block }
+    .status{
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      color:#cbd5e1; position:relative; padding-left:22px;
+    }
+    .status::before{
+      content:""; position:absolute; left:8px; top:50%; transform:translateY(-50%);
+      width:6px; height:6px; border-radius:50%; background: var(--brand);
+      box-shadow:0 0 0 0 rgba(91,155,255,.55);
+      animation:pulse 1.8s infinite;
+    }
+    .loading .status::before{ background: var(--brand2); }
+    @keyframes pulse {
+      0% { box-shadow:0 0 0 0 rgba(91,155,255,.55); }
+      70%{ box-shadow:0 0 0 6px rgba(91,155,255,0); }
+      100%{ box-shadow:0 0 0 0 rgba(91,155,255,0); }
+    }
+
+    .body{ padding:20px; display:flex; gap:16px; flex-direction:column; overflow:auto; }
+    label{
+      font-size:12px; color:#b7c2d0; margin-bottom:4px; display:block;
+      letter-spacing:.06em; text-transform:uppercase;
+    }
+
     input[type="text"], textarea, .file{
-      width:100%; background:var(--panel); color:var(--text); border:1px solid rgba(255,255,255,.08);
+      width:100%; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+      color:var(--text); border:1px solid rgba(255,255,255,.1);
       border-radius:10px; padding:10px 12px; outline:none;
+      transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    input[type="text"]:focus, textarea:focus, .file:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 3px rgba(91,155,255,.35);
     }
     textarea{
-      resize:vertical; min-height:260px; font: 13.5px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      resize:vertical; min-height:260px;
+      font: 13.5px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
     }
     .file{ padding:10px 12px }
 
     .value{
       background:#0b1220; border:1px solid rgba(255,255,255,.08);
-      border-radius:10px; padding:10px 12px;
-      font: 13.5px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
-      white-space:pre-wrap; word-wrap:break-word;
+      border-radius:12px; padding:10px 12px;
+      font:13.5px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      white-space:pre-wrap; word-wrap:break-word; line-height:1.6;
     }
     #attributes{
-      min-height: 250px;
-      max-height:calc(var(--panel-h) - 340px);
-      overflow:auto;
+      min-height:250px; max-height:calc(var(--panel-h) - 340px); overflow:auto;
+      background-image:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size:100% 32px; background-position:0 14px;
     }
-    #fetchBtn{
-      min-width:150px;
-    }
+    #fetchBtn{ min-width:150px; }
+
     .score{
-      display:inline-block; padding:8px 12px; border-radius:999px; font-weight:700;
-      background:rgba(16,185,129,.15); color:#a7f3d0; border:1px solid rgba(16,185,129,.35);
+      display:inline-block; padding:8px 14px; border-radius:999px; font-weight:700;
+      background:rgba(34,197,94,.18); color:#c3f1d1; border:1px solid rgba(34,197,94,.35);
+      letter-spacing:.02em;
     }
+
     .spinner{ width:18px;height:18px;border-radius:50%;
-      border:3px solid rgba(255,255,255,.2); border-top-color:#fff; animation:spin .9s linear infinite; display:none; margin-left:6px; }
-    .loading .spinner{ display:inline-block } @keyframes spin{ to{ transform:rotate(360deg) } }
+      border:3px solid rgba(255,255,255,.2); border-top-color:#fff;
+      animation:spin .9s linear infinite; display:none; margin-left:6px;
+    }
+    .loading .spinner{ display:inline-block }
+    @keyframes spin{ to{ transform:rotate(360deg) } }
 
     .btn{
       background:linear-gradient(180deg, var(--brand2), var(--brand));
       color:white; border:none; border-radius:12px; padding:12px 16px; cursor:pointer;
-      font-weight:700; letter-spacing:.2px; box-shadow:0 10px 22px rgba(59,130,246,.35);
-      transition: transform .06s ease, filter .2s ease;
+      font-weight:700; letter-spacing:.2px;
+      box-shadow:0 12px 28px rgba(91,155,255,.35);
+      transition:transform .08s ease, filter .25s ease, box-shadow .25s ease;
     }
-    .btn:active{ transform: translateY(1px) }
+    .btn:hover{ transform:translateY(-1px); filter:brightness(1.03); }
+    .btn:active{ transform:translateY(0); filter:brightness(.98); }
+    .btn:focus-visible{ outline:2px solid rgba(91,155,255,.4); outline-offset:2px; }
     .btn.block{ width:100% }
     .btn.lg{ font-size:16px }
     .btn.ghost{ background:transparent; color:#cbd5e1; border:1px dashed rgba(255,255,255,.25); box-shadow:none; }
-    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:nowrap; }
+
+    .actions{ display:flex; gap:12px; align-items:center; flex-wrap:nowrap; }
     .actions .inline-input{ flex:1; min-width:200px; }
-    .inline-input{ width:260px; }
+    .inline-input{ width:280px; }
     .outStatusHidden{ display:none; }
+
+    /* Progress bar (legacy, kept) */
+    .progress-wrap{ display:none; }
+    .progress-wrap.active{ display:block; }
+    .progress-track{
+      width:100%; height:8px; border-radius:999px;
+      background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); overflow:hidden;
+    }
+    .progress-bar{
+      height:100%; width:0%; background:linear-gradient(180deg, var(--brand2), var(--brand));
+      box-shadow:0 6px 16px rgba(59,130,246,.35) inset; animation:grow 3s linear forwards;
+    }
+    @keyframes grow{ from{width:0%} to{width:100%} }
+
+    /* Centered overlay */
+    .center-overlay{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(2,6,23,.55); backdrop-filter:blur(3px);
+      z-index:9998; opacity:0; visibility:hidden;
+      transition:opacity .18s ease, visibility .18s ease;
+    }
+    .center-overlay.show{ display:grid; opacity:1; visibility:visible; }
+    .center-card{
+      min-width:320px; max-width:520px;
+      padding:22px; border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 20px 50px rgba(0,0,0,.55);
+      text-align:center; transform:scale(.98);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .center-overlay.show .center-card{ transform:scale(1); box-shadow:0 24px 60px rgba(0,0,0,.55); }
+    .big-spinner{
+      width:54px; height:54px; margin:10px auto 6px; border-radius:50%;
+      border:6px solid rgba(255,255,255,.2); border-top-color:#fff; animation:spin 1s linear infinite;
+    }
+    .center-title{ font-weight:700; margin:6px 0 2px; }
+    .center-sub{ font-size:13px; color:#cbd5e1; margin:0; }
+
+    /* Toast popup */
+    .toast{
+      position:fixed; top:30%; left:50%;
+      transform:translate(-50%, -50%) scale(0.9);
+      max-width:480px;
+      background:linear-gradient(180deg, rgba(16,185,129,.35), rgba(16,185,129,.25));
+      border:1px solid rgba(16,185,129,.65); color:#d1fae5;
+      padding:14px 18px; border-radius:14px;
+      box-shadow:0 12px 28px rgba(0,0,0,.55);
+      font:15px/1.5 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+      opacity:0; transition:opacity .3s ease, transform .3s ease; z-index:9999;
+    }
+    .toast.show{ opacity:1; transform:translate(-50%, -50%) scale(1.0); }
   </style>
 </head>
 <body>
@@ -116,8 +216,15 @@
 
         <div>
           <label for="image">Product Image (optional)</label>
-          <input id="image" class="file" type="file" accept="image/*" />
-          <div class="hint">Adding an image can improve type detection and attribute confidence.</div>
+          <input id="image" class="file" type="file" accept="image/*" multiple />
+          <div id="fileList" class="value" style="min-height:40px; margin-top:8px;">No files selected.</div>
+
+          <!-- legacy progress bar kept (not used by overlay) -->
+          <div id="progressWrap" class="progress-wrap" style="margin-top:8px;">
+            <div class="progress-track">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
         </div>
 
         <button class="btn lg block" id="runBtn">🚀 Run extraction now</button>
@@ -161,6 +268,15 @@
   </div>
 </div>
 
+<!-- Center overlay (spinner -> optional message) -->
+<div id="centerOverlay" class="center-overlay" aria-hidden="true">
+  <div class="center-card" id="centerCard">
+    <div id="centerSpinner" class="big-spinner" aria-label="Loading"></div>
+    <div class="center-title" id="centerTitle">Processing…</div>
+    <p class="center-sub" id="centerSub">Please wait a moment</p>
+  </div>
+</div>
+
 <script>
   const BASE = 'http://localhost:8088/autospec/api/v1/feedItem';
 
@@ -169,7 +285,8 @@
   const rawEl = document.getElementById('rawInput');
   const runBtn = document.getElementById('runBtn');
   const fetchBtn = document.getElementById('fetchBtn');
-  const imageEl = document.getElementById('image'); // <-- added
+  const imageEl = document.getElementById('image');
+  const fileListEl = document.getElementById('fileList');
 
   const inStatus = document.getElementById('inStatus');
   const outStatus = document.getElementById('outStatus');
@@ -179,63 +296,259 @@
   const attributesEl = document.getElementById('attributes');
   const scoreEl = document.getElementById('score');
 
+  // legacy progress refs (kept)
+  const progressWrap = document.getElementById('progressWrap');
+  const progressBar  = document.getElementById('progressBar');
+
+  // Center overlay refs
+  const centerOverlay = document.getElementById('centerOverlay');
+  const centerSpinner = document.getElementById('centerSpinner');
+  const centerTitle   = document.getElementById('centerTitle');
+  const centerSub     = document.getElementById('centerSub');
+
+  // state
+  let overlayTimers = [];
+  let pendingToastMsg = null;
+
   function toggleLoading(v){
     if(!outStatus) return;
     outStatus.classList.toggle('outStatusHidden', !v);
     outStatus.classList.toggle('loading', v);
   }
 
-  // Read response safely even if server mislabels content-type
   async function readSmart(res){
     const text = await res.text();
     try { return JSON.parse(text); } catch { return text; }
   }
 
-  // Map server response to UI fields
   function updateOutputFromData(data){
     let productType='—', attrs='—', score='—', statusText='—';
 
     if(typeof data === 'string'){
-      attrs = data || '—';
+      pendingToastMsg = data; // used for Run Extraction message
     } else {
       productType = data.productType || data.type || data.category || '—';
       statusText  = data.status || '—';
 
       const pa = data.productAttributes ?? data.attributes ?? null;
       if (pa) {
-        // Build key: value pairs without quotes around keys, each on a new line
-        attrs = Object.entries(pa)
-          .map(([k,v]) => `${k}: ${JSON.stringify(v)}`)
-          .join("\n");
+        attrs = Object.entries(pa).map(([k,v]) => `${k}: ${JSON.stringify(v)}`).join("\n");
       } else {
         attrs = '—';
       }
 
       const cs = data.confidenceScore;
-      if (typeof cs === 'number') {
-        score = `${Math.round(cs * 100)}%`;
-      } else {
+      if (typeof cs === 'number') score = `${Math.round(cs * 100)}%`;
+      else {
         const acc = data.accuracy ?? data.confidence ?? data.score;
         score = (typeof acc === 'number') ? `${Math.round(acc*100)}%` : (acc || '—');
       }
+      attributesEl.textContent = attrs;
     }
 
     productTypeEl.textContent = productType;
     statusEl.textContent = statusText;
-    attributesEl.textContent = attrs;
     scoreEl.textContent = score;
   }
 
-  // helper: read selected image as Data URL (base64)
-  function readSelectedImageAsDataURL(){
-    const f = imageEl?.files && imageEl.files[0];
-    if(!f) return Promise.resolve("");
-    return new Promise((resolve, reject)=>{
+  async function readSelectedImagesAsDataURLs(){
+    const files = imageEl?.files ? Array.from(imageEl.files) : [];
+    if (!files.length) return [];
+    const readers = files.map(f => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result || "");
       reader.onerror = reject;
       reader.readAsDataURL(f);
+    }));
+    return Promise.all(readers);
+  }
+
+  /* ===== Centered overlay controller ===== */
+  function showCenterOverlay(){
+    centerSpinner.style.display = 'block';
+    centerTitle.textContent = 'Processing…';
+    centerSub.textContent   = 'Please wait a moment';
+    centerOverlay.classList.add('show');
+  }
+
+  function switchOverlayToMessage(){
+    centerSpinner.style.display = 'none';
+    centerTitle.textContent = pendingToastMsg || 'Done';
+    centerSub.textContent   = 'You can continue now';
+  }
+
+  function hideCenterOverlay(){
+    centerOverlay.classList.remove('show');
+    overlayTimers.forEach(t => clearTimeout(t));
+    overlayTimers = [];
+  }
+
+  /**
+   * Shows spinner for spinnerMs (default 2000ms). If showMessageAfter is true,
+   * replaces spinner with message for messageMs (default 3000ms), then hides.
+   * If false, hides immediately after spinner.
+   */
+  function runCenteredSequence({ showMessageAfter = true, spinnerMs = 2000, messageMs = 3000 } = {}){
+    hideCenterOverlay(); // clear any previous
+    showCenterOverlay();
+    overlayTimers.push(setTimeout(() => {
+      if(showMessageAfter){
+        switchOverlayToMessage();
+        overlayTimers.push(setTimeout(() => hideCenterOverlay(), messageMs));
+      }else{
+        hideCenterOverlay();
+      }
+    }, spinnerMs));
+  }
+
+  function clearInputs(){
+    itemIdEl.value = '';
+    rawEl.value = '';
+    imageEl.value = '';
+    fileListEl.textContent = 'No files selected.';
+  }
+
+  function updateFileList(){
+    const files = imageEl?.files ? Array.from(imageEl.files) : [];
+    if (!files.length) {
+      fileListEl.textContent = 'No files selected.';
+      return;
+    }
+
+    // Container
+    const wrap = document.createElement('div');
+    wrap.style.display = 'flex';
+    wrap.style.flexDirection = 'column';
+    wrap.style.gap = '10px';
+
+    // Top bar with "Remove all"
+    const bar = document.createElement('div');
+    bar.style.display = 'flex';
+    bar.style.justifyContent = 'flex-end';
+    bar.style.alignItems = 'center';
+
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.textContent = 'Remove all';
+    clearBtn.style.background = 'transparent';
+    clearBtn.style.color = '#cbd5e1';
+    clearBtn.style.border = '1px dashed rgba(255,255,255,.25)';
+    clearBtn.style.borderRadius = '8px';
+    clearBtn.style.padding = '6px 10px';
+    clearBtn.style.cursor = 'pointer';
+    clearBtn.style.fontWeight = '600';
+    clearBtn.style.fontSize = '12px';
+    clearBtn.onmouseenter = () => (clearBtn.style.filter = 'brightness(1.05)');
+    clearBtn.onmouseleave = () => (clearBtn.style.filter = 'none');
+    clearBtn.onclick = clearAllFiles;
+
+    bar.appendChild(clearBtn);
+    wrap.appendChild(bar);
+
+    // Thumbnails grid
+    const grid = document.createElement('div');
+    grid.style.display = 'flex';
+    grid.style.flexWrap = 'wrap';
+    grid.style.gap = '10px';
+
+    files.forEach((file, idx) => {
+      const item = document.createElement('div');
+      item.style.position = 'relative';
+      item.style.display = 'flex';
+      item.style.alignItems = 'center';
+      item.style.gap = '8px';
+      item.style.padding = '6px 8px';
+      item.style.border = '1px solid rgba(255,255,255,.10)';
+      item.style.borderRadius = '8px';
+      item.style.background = 'rgba(255,255,255,.03)';
+
+      // thumb
+      const img = document.createElement('img');
+      img.alt = file.name;
+      img.width = 42;
+      img.height = 42;
+      img.style.borderRadius = '6px';
+      img.style.objectFit = 'cover';
+      img.style.display = 'block';
+      img.style.border = '1px solid rgba(255,255,255,.12)';
+      const url = URL.createObjectURL(file);
+      img.src = url;
+      img.onload = () => URL.revokeObjectURL(url);
+
+      // filename
+      const name = document.createElement('div');
+      name.textContent = file.name;
+      name.style.fontSize = '12.5px';
+      name.style.color = '#cbd5e1';
+      name.style.maxWidth = '220px';
+      name.style.overflow = 'hidden';
+      name.style.textOverflow = 'ellipsis';
+      name.style.whiteSpace = 'nowrap';
+
+      // per-image delete (small ❌)
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.setAttribute('aria-label', `Remove ${file.name}`);
+      del.textContent = '✕';
+      del.style.position = 'absolute';
+      del.style.top = '-8px';
+      del.style.right = '-8px';
+      del.style.width = '20px';
+      del.style.height = '20px';
+      del.style.borderRadius = '999px';
+      del.style.border = '1px solid rgba(255,255,255,.25)';
+      del.style.background = 'rgba(17,24,39,.85)';
+      del.style.color = '#e5e7eb';
+      del.style.cursor = 'pointer';
+      del.style.fontSize = '12px';
+      del.style.lineHeight = '18px';
+      del.style.display = 'grid';
+      del.style.placeItems = 'center';
+      del.onmouseenter = () => (del.style.filter = 'brightness(1.1)');
+      del.onmouseleave = () => (del.style.filter = 'none');
+
+      del.onclick = () => {
+        // Remove this file by rebuilding the FileList without it
+        const remaining = Array.from(imageEl.files).filter((_, i) => i !== idx);
+        replaceSelectedFiles(remaining);
+        updateFileList();
+      };
+
+      item.appendChild(img);
+      item.appendChild(name);
+      item.appendChild(del);
+      grid.appendChild(item);
     });
+
+    wrap.appendChild(grid);
+
+    // Render into the existing #fileList element
+    fileListEl.innerHTML = '';
+    fileListEl.appendChild(wrap);
+  }
+
+  function replaceSelectedFiles(newFiles){
+    const dt = new DataTransfer();
+    newFiles.forEach(f => dt.items.add(f));
+    imageEl.files = dt.files;
+  }
+
+  // Clear all selected files
+  function clearAllFiles(){
+    replaceSelectedFiles([]);
+    updateFileList();
+  }
+  // (kept) toast helper
+  function showToast(message){
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = message;
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => {
+      t.classList.remove('show');
+      setTimeout(() => t.remove(), 300);
+    }, 3000);
   }
 
   async function runExtraction(){
@@ -246,17 +559,21 @@
       return;
     }
 
+    // Keep these in one place so we can mirror to the right *after* overlay finishes
+    const spinnerMs = 2000;
+    const messageMs = 2000;
+
+    // Show spinner -> message
+    runCenteredSequence({ showMessageAfter:true, spinnerMs, messageMs });
     toggleLoading(true);
     inStatus.textContent = 'Preparing request…';
 
     try{
-      // NEW: capture uploaded image as a Data URL so backend receives productImageUrl
-      const imgDataUrl = await readSelectedImageAsDataURL();
-
+      const imgDataUrls = await readSelectedImagesAsDataURLs();
       const body = {
         feedItemId: feedItemId,
         productDescription: rawEl.value.trim() || "",
-        productImageData: imgDataUrl || "",
+        productImageDataList: imgDataUrls,
         timeStamp: new Date().toISOString()
       };
 
@@ -269,44 +586,49 @@
       const data = await readSmart(res);
 
       if(!res.ok){
-        updateOutputFromData('');
         attributesEl.textContent = `❌ API error: ${res.status}\n${typeof data==='string'?data:JSON.stringify(data,null,2)}`;
+        pendingToastMsg = typeof data==='string' ? data : 'Request failed';
         return;
       }
 
       updateOutputFromData(data);
     }catch(err){
-      updateOutputFromData('');
       attributesEl.textContent = '❌ ' + (err?.message || String(err));
+      pendingToastMsg = err?.message || 'Unexpected error';
     }finally{
       toggleLoading(false);
       inStatus.textContent = 'Ready';
+
+      // IMPORTANT: Do NOT clear left inputs (retain Feed Item ID, Raw text, and selected images)
+
+      // After spinner + message disappear, mirror ID to the right-side input
+      setTimeout(() => {
+        itemIdInlineEl.value = feedItemId;
+      }, spinnerMs + messageMs);
     }
   }
+
 
   async function fetchByFeedItemId(){
     const id = (itemIdInlineEl.value || '').trim();
     if(!id){ alert('Please enter a Feed Item ID first.'); itemIdInlineEl.focus(); return; }
 
+    // CHANGED: spinner 1s only, no message
+    runCenteredSequence({ showMessageAfter:false, spinnerMs:1000 });
     toggleLoading(true);
-
     try{
       const res = await fetch(`${BASE}/${encodeURIComponent(id)}`, {
         method:'GET',
         headers:{ 'Accept':'application/json' }
       });
-
       const data = await readSmart(res);
 
       if(!res.ok){
-        updateOutputFromData('');
         attributesEl.textContent = `❌ Fetch by ID failed (${res.status}).\n${typeof data==='string'?data:JSON.stringify(data,null,2)}`;
         return;
       }
-
       updateOutputFromData(data);
     }catch(e){
-      updateOutputFromData('');
       attributesEl.textContent = '❌ ' + (e?.message || String(e));
     }finally{
       toggleLoading(false);
@@ -319,6 +641,9 @@
   document.addEventListener('keydown', (e)=>{
     if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){ runExtraction(); }
   });
+
+  imageEl.addEventListener('change', updateFileList);
+  updateFileList();
 </script>
 </body>
 </html>
