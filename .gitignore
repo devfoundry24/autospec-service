@@ -86,6 +86,7 @@ out/
 .env
 .env.*
 *.secret
+*secrets*properties
 *.key
 *.pem
 *.crt
