@@ -7,6 +7,7 @@
 - [Tech Stack Summary](#-tech-stack-summary)
 - [Project Structure](#-project-structure)
 - [Future Enhancements](#-future-enhancements)
+- [Demo Screens](#-future-enhancements)
 
 
 # 🧠 Autospec Service – Product Spec extraction from product Descriptions and Images
@@ -162,3 +163,9 @@ The following improvements are planned to enhance scalability, maintainability, 
 | **Cloud Deployment** | Deploy to AWS / GCP using Kubernetes (EKS / GKE). | Achieve high availability and auto-scaling in production. |
 
 > 💡 **Note:** These enhancements will be implemented iteratively as the system transitions from proof-of-concept (POC) to a fully scalable enterprise-grade microservice.
+
+
+## 📜 Demo Screens
+
+![img.png](images/img.png)
+
